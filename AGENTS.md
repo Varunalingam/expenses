@@ -37,8 +37,8 @@ from [Icons8](https://icons8.com).
      bundles.
    - Always rely on local, downloaded Icons8 asset files.
 4. **Centralized Registration**:
-   - Never use direct inline relative `require('../../assets/icons/...')` across multiple screens.
-   - Register all icons in `src/constants/icons.ts` and expose a typed `Icon` component (`src/components/ui/Icon.tsx`).
+   - Never use direct inline relative `require('../../assets/icons/...')` across multiple screens.\n - Register all
+     icons in `src/constants/icons.ts` and expose a typed `Icon` component (`src/components/ui/Icon.tsx`).
 5. **Attribution**:
    - Ensure the app settings or About screen preserves attribution to Icons8 ([https://icons8.com](https://icons8.com))
      in compliance with Icons8 licensing.
@@ -64,7 +64,6 @@ When adding new files, always place them in the correct directory as defined in 
 | **Icons & Visual Assets**       | `assets/icons/`, `assets/images/` | Downloaded asset files from [icons8.com](https://icons8.com).                                         |
 | **Icon Registries & Constants** | `src/constants/`                  | Centralized icon registries (`icons.ts`), storage keys, app configs.                                  |
 | **Test Suites**                 | `__tests__/`                      | Unit and integration tests (Jest + react-test-renderer).                                              |
-| **Agent Skills**                | `skills/`                         | Custom or system agent execution skills and workflows.                                                |
 
 ---
 
@@ -168,10 +167,12 @@ Before completing any task, execute the following checklist in sequence:
    - All tests use Jest configured via `jest.config.js` with `@react-native/jest-preset`.
    - Run tests with `npm test`.
 2. **Native Dependency Mocking**:
-   - Native modules such as `react-native-screens` must be mocked in `jest.setup.js` rather than repeatedly mocked across individual test files.
+   - Native modules such as `react-native-screens` must be mocked in `jest.setup.js` rather than repeatedly mocked
+     across individual test files.
 3. **Renderer & Timing Lifecycle**:
    - Use `react-test-renderer` wrapped inside `ReactTestRenderer.act(...)` for UI rendering assertions.
-   - For components with asynchronous layout callbacks or timers, guard the test suite with `jest.useFakeTimers()`, `jest.runOnlyPendingTimers()`, and restore with `jest.useRealTimers()`.
+   - For components with asynchronous layout callbacks or timers, guard the test suite with `jest.useFakeTimers()`,
+     `jest.runOnlyPendingTimers()`, and restore with `jest.useRealTimers()`.
 4. **Coverage Expectations**:
    - Every pure utility in `src/utils/` must have 100% test coverage in `__tests__/utils.test.ts`.
    - New screens and feature components must have rendering tests verifying clean mount and initial state display.
@@ -184,24 +185,19 @@ Before completing any task, execute the following checklist in sequence:
    - Always wrap top-level screen containers in `ScreenWrapper` (`src/components/layout/ScreenWrapper.tsx`).
    - `ScreenWrapper` defaults to `edges={['top', 'left', 'right']}` to avoid duplicate padding on bottom tab bars.
 2. **Dynamic Inset Calculations**:
-   - Use `useSafeAreaInsets()` from `react-native-safe-area-context` when styling custom bars, footers, or bottom tab navigators to respect iOS Home Indicator and Android navigation bar insets.
+   - Use `useSafeAreaInsets()` from `react-native-safe-area-context` when styling custom bars, footers, or bottom tab
+     navigators to respect iOS Home Indicator and Android navigation bar insets.
 
 ---
 
 ## 10. Feature Slice & State Management Patterns
 
 1. **Domain Feature Encapsulation**:
-   - Encapsulate distinct features inside `src/features/[feature]/` with dedicated `components/`, `hooks/`, and `types/`.
-   - Screens must remain thin orchestration views, passing typed callbacks and domain entities down to feature components.
+   - Encapsulate distinct features inside `src/features/[feature]/` with dedicated `components/`, `hooks/`, and
+     `types/`.
+   - Screens must remain thin orchestration views, passing typed callbacks and domain entities down to feature
+     components.
 2. **Hook Separation**:
-   - Business calculations, summary aggregations, and data manipulations belong inside dedicated custom hooks (e.g. `useExpenses.ts`).
+   - Business calculations, summary aggregations, and data manipulations belong inside dedicated custom hooks (e.g.
+     `useExpenses.ts`).
    - Expose strongly typed state structures (e.g. `Transaction`, `CategorySpending`, `ExpenseSummary`).
-
----
-
-## 11. Agent Skills & Dynamic Workflows
-
-1. **Skill Locations**:
-   - System and project agent skills are defined under `skills/system/<skill-name>/SKILL.md`.
-2. **Execution Conventions**:
-   - Agents reading or executing workflow scripts must respect YAML frontmatter definitions and orchestrator primitives defined within `skills/system/run-workflow/SKILL.md`.
