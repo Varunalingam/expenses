@@ -62,6 +62,8 @@ my-app/
 │   ├── hooks/                    # Global/shared custom React hooks
 │   ├── lib/                      # Client setup (storage, API client, analytics, logger)
 │   ├── native/                   # Native module bridges, turbo modules, platform wrappers
+│   │   ├── splashScreen.ts       # Platform bridge for dismissing native Android splash screen
+│   │   └── index.ts              # Native module exports
 │   ├── store/                    # Global state management and stores
 │   ├── theme/                    # Design tokens (colors, typography, spacing, shadows)
 │   │   ├── colors.ts             # Palette, semantic tokens, category colors
@@ -166,6 +168,7 @@ my-app/
 - Isolates platform-specific native code and TurboModules.
 - Provides TypeScript interfaces over native events, device hardware (biometrics, camera, haptics), or custom native modules.
 - Ensures graceful fallbacks when running on unsupported platforms or test environments.
+- **`SplashScreen`** (`src/native/splashScreen.ts`): Provides a unified TypeScript API (`SplashScreen.hide()`) to dismiss the Android native loading overlay on app mount, with safe no-op fallbacks for iOS and Jest test suites.
 
 ### 3.7. Global State (`src/store/`)
 
@@ -359,5 +362,19 @@ The project includes 15 downloaded 48px Icons8 assets:
 
 - **`__tests__/App.test.tsx`**: Smoke test rendering the root App with fake timer lifecycle guards.
 - **`__tests__/HomeScreen.test.tsx`**: Render test ensuring greeting, balance card, and component tree mount without errors.
+- **`__tests__/splashScreen.test.ts`**: Unit test suite validating platform gating, native module invocation on Android, and graceful fallbacks when the native module is absent.
 - **`__tests__/utils.test.ts`**: Unit test suite for `formatCurrency` and `formatDate`.
 - **`jest.setup.js`**: Native mock definitions for `react-native-screens` ensuring smooth headless Jest runs.
+
+### 7.8. Native Loading & Launch Screen Parity
+
+The application maintains strict visual and behavioral parity during cold boot between iOS and Android:
+
+- **iOS Implementation**:
+  - `ios/expenses/LaunchScreen.storyboard` renders the app title `expenses` at 1/3 viewport height (36pt bold) and subtitle `Powered by React Native` at the bottom (17pt regular) on a white system background.
+  - Automatically transitions to the React Native root view upon initial render.
+- **Android Implementation**:
+  - **Cold Start Window Background**: `android/app/src/main/res/drawable/launch_screen_background.xml` applied via `@style/SplashTheme` on `MainActivity` eliminates cold-start white/blank screen flashes.
+  - **Launch Layout**: `android/app/src/main/res/layout/launch_screen.xml` mirrors iOS typography and layout positioning using weighted spacing (1/3 top offset for `expenses` title, 28dp bottom margin for `Powered by React Native`). Supports light mode and dark mode via `values/colors.xml` and `values-night/colors.xml`.
+  - **Native Splash Overlay**: `SplashScreen.kt` presents an uncancelable full-screen dialog on `MainActivity.onCreate()` using `@style/SplashScreen_Fullscreen`, preventing UI thread stalls.
+  - **Bridge & Dismissal**: `SplashScreenModule.kt` and `SplashScreenPackage.kt` expose `SplashScreenModule.hide()`. When React Native mounts `App.tsx`, `SplashScreen.hide()` triggers a smooth 250ms alpha fade-out transition. A 4-second safety watchdog ensures dismissal even if bundle initialization errors occur.
