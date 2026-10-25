@@ -19,34 +19,92 @@ my-app/
 ├── ios/                          # Native iOS project (Xcode, CocoaPods, AppDelegate)
 ├── android/                      # Native Android project (Gradle, MainActivity, Manifest)
 │
+├── __tests__/                    # Test suites (Jest + react-test-renderer)
+│   ├── App.test.tsx              # Root App rendering & navigation smoke test
+│   ├── HomeScreen.test.tsx       # HomeScreen rendering & interaction test
+│   └── utils.test.ts             # Unit tests for currency and date formatting utilities
+│
 ├── src/
 │   ├── navigation/               # React Navigation setup, stacks, tabs, typed routes
+│   │   ├── BottomTabNavigator.tsx# 5-tab bottom navigation with safe-area support
+│   │   ├── RootNavigator.tsx     # Navigation container & theme provider
+│   │   └── index.ts              # Navigation exports
 │   ├── screens/                  # Top-level screen components mounted by navigators
+│   │   ├── HomeScreen.tsx        # Dashboard screen (balance, quick actions, recents)
+│   │   ├── TransactionsScreen.tsx# Transaction list with filter pills (All/Expense/Income)
+│   │   ├── BudgetsScreen.tsx     # Monthly budget & category allocation progress
+│   │   ├── AnalyticsScreen.tsx   # Savings rate & category spending distribution
+│   │   ├── SettingsScreen.tsx    # User profile, app preferences & Icons8 attribution
+│   │   └── index.ts              # Screens barrel export
 │   ├── features/                 # Domain logic organized by feature slices
-│   │   └── [feature-name]/       # e.g., expenses, budgets, analytics, categories
+│   │   └── expenses/             # Expenses domain feature slice
 │   │       ├── components/       # Feature-specific UI components
+│   │       │   ├── BalanceCard.tsx
+│   │       │   ├── CategorySpendingSection.tsx
+│   │       │   ├── QuickActions.tsx
+│   │       │   ├── RecentTransactionsList.tsx
+│   │       │   └── index.ts
 │   │       ├── hooks/            # Feature-specific hooks and business logic
+│   │       │   └── useExpenses.ts# In-memory expense state & summary computation
 │   │       ├── services/         # Feature API/persistence calls
 │   │       └── types/            # Feature-scoped type definitions
+│   │           └── index.ts      # Transaction, CategorySpending, ExpenseSummary types
 │   ├── components/               # Shared, domain-agnostic reusable UI
 │   │   ├── ui/                   # Atoms/molecules: Button, Input, Card, Badge, Text, Icon
+│   │   │   ├── Badge.tsx         # Semantic badge component (success, danger, etc.)
+│   │   │   ├── Button.tsx        # Multi-variant button component (primary, outline, etc.)
+│   │   │   ├── Card.tsx          # Multi-variant card component (elevated, flat, outlined)
+│   │   │   ├── Icon.tsx          # Typed Icons8 icon renderer
+│   │   │   └── index.ts
 │   │   └── layout/               # ScreenWrapper, Container, Spacer, Row, Column
+│   │       ├── ScreenWrapper.tsx # Safe-area aware screen container
+│   │       └── index.ts
 │   ├── hooks/                    # Global/shared custom React hooks
 │   ├── lib/                      # Client setup (storage, API client, analytics, logger)
 │   ├── native/                   # Native module bridges, turbo modules, platform wrappers
 │   ├── store/                    # Global state management and stores
 │   ├── theme/                    # Design tokens (colors, typography, spacing, shadows)
+│   │   ├── colors.ts             # Palette, semantic tokens, category colors
+│   │   ├── spacing.ts            # 4pt/8pt grid spacing and borderRadius tokens
+│   │   ├── typography.ts         # Font sizes and font weights
+│   │   └── index.ts
 │   ├── types/                    # Shared TypeScript definitions (navigation, models)
+│   │   └── navigation.ts         # Route param lists and screen props types
 │   ├── utils/                    # Pure utility functions (currency, date, math)
+│   │   ├── currency.ts           # Currency formatter (formatCurrency)
+│   │   └── date.ts               # Relative & formatted date helper (formatDate)
 │   └── constants/                # Global static constants (storage keys, configs, icon mapping)
+│       └── icons.ts              # Centralized Icons8 PNG asset dictionary & IconName type
 │
 ├── assets/
 │   ├── images/                   # Static raster images and illustrations (downloaded from icons8.com)
 │   ├── fonts/                    # Custom font families (otf, ttf)
 │   └── icons/                    # Downloaded icon asset files from icons8.com (.png, .svg)
+│       ├── icons8-arrow-down-48.png
+│       ├── icons8-arrow-up-48.png
+│       ├── icons8-bell-48.png
+│       ├── icons8-bill-48.png
+│       ├── icons8-budget-48.png
+│       ├── icons8-car-48.png
+│       ├── icons8-home-48.png
+│       ├── icons8-money-bag-48.png
+│       ├── icons8-pie-chart-48.png
+│       ├── icons8-plus-48.png
+│       ├── icons8-receipt-48.png
+│       ├── icons8-restaurant-48.png
+│       ├── icons8-settings-48.png
+│       ├── icons8-shopping-bag-48.png
+│       └── icons8-wallet-48.png
+│
+├── skills/                       # Dynamic agent skills and workflow orchestration
+│   └── system/
+│       └── run-workflow/
+│           └── SKILL.md
 │
 ├── App.tsx                       # Root component: sets up providers & RootNavigator
 ├── index.js                      # Application entry point registered with AppRegistry
+├── jest.config.js                # Jest test runner configuration with transform patterns
+├── jest.setup.js                 # Global Jest setup & react-native-screens mock
 ├── metro.config.js               # Metro bundler configuration
 ├── babel.config.js               # Babel compiler configuration
 ├── tsconfig.json                 # TypeScript compiler configuration
@@ -128,6 +186,15 @@ my-app/
 - `utils/`: Pure functions with zero side-effects (e.g. `formatCurrency(amount, currency)`, `formatDate(date)`, `validateAmount(val)`).
 - `types/`: Common entities across features (e.g. `Currency`, `DateRange`, `ID`).
 
+### 3.10. Test Infrastructure (`__tests__/`, `jest.config.js`, `jest.setup.js`)
+
+- Configured using `@react-native/jest-preset` with mock configurations for native screen dependencies (`react-native-screens`).
+- Tests cover component rendering, user interactions, and pure utility business logic with 100% deterministic assertion guarantees.
+
+### 3.11. Agent Skills & Dynamic Workflows (`skills/`)
+
+- Provides specialized agent execution capabilities under `skills/` for orchestrating complex multi-agent workflows, code analysis, and refactoring scripts.
+
 ---
 
 ## 4. Visual Asset Management (Icons8)
@@ -203,5 +270,94 @@ flowchart TD
   - High-performance Rust linter.
   - Configured with `react`, `typescript`, `jest`, `unicorn`, and `oxlint-plugin-react-native`.
   - Enforces `react-native/no-unused-styles`, `react-native/no-inline-styles`, and `react-native/no-single-element-style-arrays`.
-- **Git Hooks**: **Husky** (`.husky/pre-commit`)
-  - Automatically runs `npm run "format&lint"` on every commit.
+- **Git Hooks**: **Husky** (`.husky/pre-commit`)\n - Automatically runs `npm run "format&lint"` on every commit.
+
+---
+
+## 7. Implemented Application Architecture & State Model
+
+### 7.1. Navigation Architecture (`src/navigation/`)
+
+- **`RootNavigator`**: Mounts the `NavigationContainer` configured with `AppNavigationTheme` aligning React Navigation's default theme tokens to `colors.background`, `colors.primary`, `colors.surface`, and `colors.textPrimary`.
+- **`BottomTabNavigator`**: Implements 5 primary app tabs using `@react-navigation/bottom-tabs`:
+  1. `Home` -> `HomeScreen` (with `home` icon)
+  2. `Transactions` -> `TransactionsScreen` (with `receipt` icon)
+  3. `Budgets` -> `BudgetsScreen` (with `budget` icon)
+  4. `Analytics` -> `AnalyticsScreen` (with `chart` icon)
+  5. `Settings` -> `SettingsScreen` (with `settings` icon)
+- **Safe Area Insets**: Computes dynamic height and bottom padding via `useSafeAreaInsets()` to adapt tab bar dimensions seamlessly across iOS home indicator and Android navigation bars.
+- **Navigation Types (`src/types/navigation.ts`)**:
+  - `MainTabParamList`: Mapping for each of the 5 tabs.
+  - `RootStackParamList`: Top-level stack definition.
+  - `MainTabScreenProps<T>`: Composite typed props combining `BottomTabScreenProps` and `NativeStackScreenProps`.
+
+### 7.2. Screen Implementations (`src/screens/`)
+
+- **`HomeScreen`**:
+  - User greeting ("Welcome back, Varun Alingam") with notification bell badge.
+  - Embeds `BalanceCard`, `QuickActions`, `CategorySpendingSection`, and `RecentTransactionsList`.
+  - Quick action callbacks navigate smoothly to `Transactions` and `Budgets`.
+- **`TransactionsScreen`**:
+  - Interactive filter pills: `All`, `Expenses`, `Income`.
+  - Filtered `FlatList` with category icons, item labels, relative dates, payment methods, and colored income/expense amounts.
+- **`BudgetsScreen`**:
+  - Overall monthly budget overview with graphical progress fill bar and remaining budget calculation.
+  - Category-by-category allocation cards displaying spent vs. allocated amounts with custom category color bars.
+- **`AnalyticsScreen`**:
+  - Monthly savings rate card calculating overall savings percentage.
+  - Expense distribution breakdown card displaying category indicators, spent amounts, and percentage of monthly total.
+- **`SettingsScreen`**:
+  - Profile card displaying user initials (`VA`), full name (`Varun Alingam`), and email address.
+  - Preferences group (Currency: `USD ($)`, Appearance: `System Default`, App Version: `1.0.0`).
+  - Icons8 attribution card providing a clickable link opening `https://icons8.com` via React Native `Linking`.
+
+### 7.3. Expenses Domain Slice (`src/features/expenses/`)
+
+- **State & Logic (`useExpenses.ts`)**:
+  - Manages reactive `transactions` and `categories` state initialized with realistic mock data.
+  - `summary` memoization:
+    - Sums `monthlyIncome` and `monthlyExpense` dynamically.
+    - Computes `totalBalance` based on a `$8,450.75` base plus net income.
+    - Calculates `savingsRate` percentage and tracking against `$2,500.00` monthly budget.
+  - Exposes `addTransaction` for prepending new records with timestamped IDs.
+- **Component Subsystem (`src/features/expenses/components/`)**:
+  - `BalanceCard`: Displays total balance, income/expense comparison, and budget percentage bar.
+  - `QuickActions`: 4 quick action buttons (`Add Expense`, `Add Income`, `Scan Receipt`, `Budgets`).
+  - `CategorySpendingSection`: Horizontal breakdown cards for active spending categories.
+  - `RecentTransactionsList`: Displays recent transactions with a "See All" shortcut.
+- **Domain Types (`src/features/expenses/types/`)**:
+  - `Transaction`: Typed entity with `id`, `title`, `category`, `categoryIcon`, `amount`, `type`, `date`, `paymentMethod`.
+  - `CategorySpending`: Category spending item with `id`, `name`, `spent`, `allocated`, `icon`, `color`.
+  - `ExpenseSummary`: Calculated totals and budget health metrics.
+
+### 7.4. Shared UI System (`src/components/ui/` & `src/components/layout/`)
+
+- **`ScreenWrapper`**: Standardized wrapper using `SafeAreaView` from `react-native-safe-area-context` with configurable edges (`top`, `left`, `right`).
+- **`Card`**: Container component supporting `flat`, `outlined`, and `elevated` elevation/border styles.
+- **`Button`**: Flexible button supporting variants (`primary`, `secondary`, `outline`, `ghost`) and sizes (`sm`, `md`, `lg`).
+- **`Badge`**: Status badge supporting `neutral`, `success`, `danger`, `warning`, and `info` color schemes.
+- **`Icon`**: Centralized image component loading typed Icons8 assets from `src/constants/icons.ts`.
+
+### 7.5. Design System Tokens (`src/theme/`)
+
+- **`colors.ts`**:
+  - Semantic primary (`#4F46E5`), success, danger, warning, and info colors.
+  - Neutrals: background (`#F8FAFC`), surface (`#FFFFFF`), borders, and text hierarchy.
+  - Category accents: `food`, `shopping`, `transport`, `bills`, `entertainment`, `income`, `other`.
+  - Tab bar theme colors (`tabBarActive`, `tabBarInactive`, `tabBarBackground`, `tabBarBorder`).
+- **`spacing.ts`**: 4pt/8pt grid spacing scale (`xxs: 2` to `huge: 40`) and border radii (`xs: 4` to `round: 9999`).
+- **`typography.ts`**: Font sizes (`caption: 11` to `display: 32`) and font weights (`regular`, `medium`, `semibold`, `bold`, `heavy`).
+
+### 7.6. Registered Icons8 Catalog (`src/constants/icons.ts`)
+
+The project includes 15 downloaded 48px Icons8 assets:
+
+- Navigation & App: `home`, `wallet`, `receipt`, `chart`, `budget`, `settings`, `bell`, `plus`.
+- Categories & Flows: `food`, `shopping`, `transport`, `bills`, `income`, `arrowUp`, `arrowDown`.
+
+### 7.7. Test Architecture (`__tests__/`)
+
+- **`__tests__/App.test.tsx`**: Smoke test rendering the root App with fake timer lifecycle guards.
+- **`__tests__/HomeScreen.test.tsx`**: Render test ensuring greeting, balance card, and component tree mount without errors.
+- **`__tests__/utils.test.ts`**: Unit test suite for `formatCurrency` and `formatDate`.
+- **`jest.setup.js`**: Native mock definitions for `react-native-screens` ensuring smooth headless Jest runs.
