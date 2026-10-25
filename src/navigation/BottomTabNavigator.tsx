@@ -12,8 +12,18 @@ import {
 } from '../screens';
 import { colors, fontSize, fontWeight } from '../theme';
 import type { MainTabParamList } from '../types/navigation';
+import { withSwipeableTab } from './SwipeableTabScreen';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
+
+const SwipeableHomeScreen = withSwipeableTab('Home', HomeScreen);
+const SwipeableTransactionsScreen = withSwipeableTab(
+  'Transactions',
+  TransactionsScreen,
+);
+const SwipeableBudgetsScreen = withSwipeableTab('Budgets', BudgetsScreen);
+const SwipeableAnalyticsScreen = withSwipeableTab('Analytics', AnalyticsScreen);
+const SwipeableSettingsScreen = withSwipeableTab('Settings', SettingsScreen);
 
 export const BottomTabNavigator: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -29,6 +39,7 @@ export const BottomTabNavigator: React.FC = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        animation: 'shift',
         tabBarActiveTintColor: colors.tabBarActive,
         tabBarInactiveTintColor: colors.tabBarInactive,
         tabBarStyle: [
@@ -43,7 +54,7 @@ export const BottomTabNavigator: React.FC = () => {
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={SwipeableHomeScreen}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused }) => (
@@ -57,7 +68,7 @@ export const BottomTabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Transactions"
-        component={TransactionsScreen}
+        component={SwipeableTransactionsScreen}
         options={{
           tabBarLabel: 'Transactions',
           tabBarIcon: ({ focused }) => (
@@ -71,7 +82,7 @@ export const BottomTabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Budgets"
-        component={BudgetsScreen}
+        component={SwipeableBudgetsScreen}
         options={{
           tabBarLabel: 'Budgets',
           tabBarIcon: ({ focused }) => (
@@ -85,7 +96,7 @@ export const BottomTabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Analytics"
-        component={AnalyticsScreen}
+        component={SwipeableAnalyticsScreen}
         options={{
           tabBarLabel: 'Analytics',
           tabBarIcon: ({ focused }) => (
@@ -99,7 +110,7 @@ export const BottomTabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Settings"
-        component={SettingsScreen}
+        component={SwipeableSettingsScreen}
         options={{
           tabBarLabel: 'Settings',
           tabBarIcon: ({ focused }) => (
