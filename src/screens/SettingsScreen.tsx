@@ -19,6 +19,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
     Linking.openURL('https://icons8.com');
   };
 
+  const handleOpenAntigravity = () => {
+    Linking.openURL('https://antigravity.google');
+  };
+
   return (
     <ScreenWrapper>
       <ScrollView
@@ -55,7 +59,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
           </View>
         </Card>
 
-        {/* Legal & Attribution (Icons8) */}
+        {/* Legal & Attribution (Icons8 & Google Antigravity) */}
         <Text style={styles.sectionHeader}>Attributions</Text>
         <Card variant="flat" style={styles.settingsCard}>
           <TouchableOpacity
@@ -65,12 +69,33 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
           >
             <View style={styles.attributionLeft}>
               <View style={styles.iconCircle}>
-                <Icon name="wallet" size={24} />
+                <Icon name="icons8" size={24} />
               </View>
               <View style={styles.attributionTextContainer}>
-                <Text style={styles.attributionTitle}>Icons by Icons8</Text>
+                <Text style={styles.attributionTitle}>Icons8</Text>
                 <Text style={styles.attributionSubtitle}>
                   All visual iconography provided by icons8.com
+                </Text>
+              </View>
+            </View>
+            <Text style={styles.attributionLink}>Visit ↗</Text>
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          <TouchableOpacity
+            style={styles.attributionRow}
+            activeOpacity={0.7}
+            onPress={handleOpenAntigravity}
+          >
+            <View style={styles.attributionLeft}>
+              <View style={styles.iconCircle}>
+                <Icon name="antigravity" size={24} />
+              </View>
+              <View style={styles.attributionTextContainer}>
+                <Text style={styles.attributionTitle}>Google Antigravity</Text>
+                <Text style={styles.attributionSubtitle}>
+                  AI-powered development by antigravity.google
                 </Text>
               </View>
             </View>
@@ -192,5 +217,10 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
     fontWeight: fontWeight.semibold,
     color: colors.primary,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: colors.borderLight,
+    marginVertical: spacing.sm,
   },
 });

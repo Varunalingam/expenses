@@ -39,7 +39,7 @@ my-app/
 │   │   ├── TransactionsScreen.tsx# Transaction list with filter pills (All/Expense/Income)
 │   │   ├── BudgetsScreen.tsx     # Monthly budget & category allocation progress
 │   │   ├── AnalyticsScreen.tsx   # Savings rate & category spending distribution
-│   │   ├── SettingsScreen.tsx    # User profile, app preferences & Icons8 attribution
+│   │   ├── SettingsScreen.tsx    # User profile, app preferences, Icons8 & Google Antigravity attributions
 │   │   └── index.ts              # Screens barrel export
 │   ├── features/                 # Domain logic organized by feature slices
 │   │   └── expenses/             # Expenses domain feature slice
@@ -94,6 +94,7 @@ my-app/
 │       ├── icons8-budget-48.png
 │       ├── icons8-car-48.png
 │       ├── icons8-home-48.png
+│       ├── icons8-icons8-48.png
 │       ├── icons8-money-bag-48.png
 │       ├── icons8-pie-chart-48.png
 │       ├── icons8-plus-48.png
@@ -101,7 +102,8 @@ my-app/
 │       ├── icons8-restaurant-48.png
 │       ├── icons8-settings-48.png
 │       ├── icons8-shopping-bag-48.png
-│       └── icons8-wallet-48.png
+│       ├── icons8-wallet-48.png
+│       └── google-antigravity-48.png
 │
 ├── App.tsx                       # Root component: sets up providers & RootNavigator
 ├── index.js                      # Application entry point registered with AppRegistry
@@ -329,7 +331,7 @@ flowchart TD
 - **`SettingsScreen`**:
   - Profile card displaying user initials (`VA`), full name (`Varun Alingam`), and email address.
   - Preferences group (Currency: `USD ($)`, Appearance: `System Default`, App Version: `1.0.0`).
-  - Icons8 attribution card providing a clickable link opening `https://icons8.com` via React Native `Linking`.
+  - Attributions card providing clickable links opening `https://icons8.com` and `https://antigravity.google` via React Native `Linking`.
 
 ### 7.3. Expenses Domain Slice (`src/features/expenses/`)
 
@@ -374,16 +376,18 @@ flowchart TD
 
 ### 7.6. Registered Icons8 Catalog (`src/constants/icons.ts`)
 
-The project includes 15 downloaded 48px Icons8 assets:
+The project includes 16 downloaded 48px Icons8 assets plus the Google Antigravity logo asset:
 
 - Navigation & App: `home`, `wallet`, `receipt`, `chart`, `budget`, `settings`, `bell`, `plus`.
 - Categories & Flows: `food`, `shopping`, `transport`, `bills`, `income`, `arrowUp`, `arrowDown`.
+- Attribution & Brand: `icons8` (`icons8-icons8-48.png`), `antigravity` (`google-antigravity-48.png`).
 
 ### 7.7. Test Architecture (`__tests__/`)
 
 - **`__tests__/App.test.tsx`**: Smoke test rendering the root App with fake timer lifecycle guards.
 - **`__tests__/HomeScreen.test.tsx`**: Render test ensuring greeting, balance card, and component tree mount without
   errors.
+- **`__tests__/SettingsScreen.test.tsx`**: Render test verifying preferences, Icons8 attribution, and Google Antigravity credits with URL link handling.
 - **`__tests__/splashScreen.test.ts`**: Unit test suite validating platform gating, native module invocation on Android,
   and graceful fallbacks when the native module is absent.
 - **`__tests__/utils.test.ts`**: Unit test suite for `formatCurrency` and `formatDate`.

@@ -16,6 +16,8 @@ export const ICONS: Record<string, ImageSourcePropType> = {
   bell: require('../../assets/icons/icons8-bell-48.png'),
   arrowUp: require('../../assets/icons/icons8-arrow-up-48.png'),
   arrowDown: require('../../assets/icons/icons8-arrow-down-48.png'),
+  antigravity: require('../../assets/icons/google-antigravity-48.png'),
+  icons8: require('../../assets/icons/icons8-icons8-48.png'),
 };
 
 export type IconName =
@@ -33,4 +35,6 @@ export type IconName =
   | 'income'
   | 'bell'
   | 'arrowUp'
-  | 'arrowDown';
+  | 'arrowDown'
+  | 'antigravity'
+  | 'icons8';
